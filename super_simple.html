@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yomi Challenge - Super Simple Version</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+        }
+        .method-selection {
+            display: block;
+            margin-top: 30px;
+        }
+        .method-cards {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .method-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 30%;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .method-card:hover {
+            transform: translateY(-5px);
+        }
+        .freehand {
+            border-top: 5px solid #E74C3C;
+        }
+        .static {
+            border-top: 5px solid #3498DB;
+        }
+        .yomi {
+            border-top: 5px solid #2ECC71;
+        }
+        .method-stats {
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .freehand .method-stats {
+            color: #E74C3C;
+        }
+        .static .method-stats {
+            color: #3498DB;
+        }
+        .yomi .method-stats {
+            color: #2ECC71;
+        }
+        .taunt {
+            font-style: italic;
+            margin-top: 10px;
+            color: #777;
+        }
+        .simulation-message {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Neocis Yomi® Accuracy Challenge</h1>
+        </header>
+
+        <div class="method-selection" id="method-selection">
+            <h2>Choose Your Method</h2>
+            <div class="method-cards">
+                <!-- Freehand Method -->
+                <div class="method-card freehand" id="freehand-card" onclick="showSimulation('Freehand')">
+                    <h3>Freehand</h3>
+                    <div class="method-stats">7.03° | 1.1mm</div>
+                    <p>Traditional approach with no guidance. Pure skill and steady hands required.</p>
+                    <div class="taunt">You're on your own, champ.</div>
+                </div>
+                
+                <!-- Static Guided Method -->
+                <div class="method-card static" id="static-card" onclick="showSimulation('Static Guided')">
+                    <h3>Static Guided</h3>
+                    <div class="method-stats">3.9° | 1.1mm</div>
+                    <p>Uses a physical guide to improve accuracy, but still requires manual control.</p>
+                    <div class="taunt">Guide's trying. You're still the weak link.</div>
+                </div>
+                
+                <!-- Yomi Robotic-Assisted Method -->
+                <div class="method-card yomi" id="yomi-card" onclick="showSimulation('Yomi Robotic-Assisted')">
+                    <h3>Yomi Robotic-Assisted</h3>
+                    <div class="method-stats">1.42° | 0.14mm</div>
+                    <p>Cutting-edge robotic guidance for unmatched precision and control.</p>
+                    <div class="taunt">Robot's got your back.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="simulation-message hidden" id="simulation-message">
+            <h2 id="selected-method-title">Method Selected</h2>
+            <p>You've selected <span id="selected-method">a method</span>.</p>
+            <p>In the full application, this would launch the 3D simulation interface.</p>
+            <p>Dr. Neugarten's study shows Yomi reduces error by 80% compared to freehand placement.</p>
+            <button onclick="goBack()">Go Back to Method Selection</button>
+        </div>
+    </div>
+
+    <script>
+        function showSimulation(method) {
+            // Hide method selection
+            document.getElementById('method-selection').classList.add('hidden');
+            
+            // Show simulation message
+            document.getElementById('simulation-message').classList.remove('hidden');
+            
+            // Update method name
+            document.getElementById('selected-method').textContent = method;
+            document.getElementById('selected-method-title').textContent = method + " Selected";
+            
+            console.log("Method selected: " + method);
+        }
+        
+        function goBack() {
+            // Hide simulation message
+            document.getElementById('simulation-message').classList.add('hidden');
+            
+            // Show method selection
+            document.getElementById('method-selection').classList.remove('hidden');
+            
+            console.log("Returned to method selection");
+        }
+    </script>
+</body>
+</html>

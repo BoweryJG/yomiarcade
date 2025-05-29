@@ -14,17 +14,18 @@
             background: #000;
             color: white;
             overflow: hidden;
-            cursor: none;
+            /* cursor: none; -- Removed to prevent cursor issues */
         }
         
         #canvas { 
             position: fixed; 
             top: 0; 
             left: 0;
-            cursor: none;
+            /* cursor: none; -- Removed to prevent cursor issues */
         }
         
         .custom-cursor {
+            display: none; /* Hide custom cursor to prevent sticking */
             position: fixed;
             width: 40px;
             height: 40px;
@@ -707,10 +708,10 @@
             mouseX = (event.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
             
-            // Update custom cursor
-            const cursor = document.getElementById('cursor');
-            cursor.style.left = event.clientX + 'px';
-            cursor.style.top = event.clientY + 'px';
+            // Update custom cursor - DISABLED to prevent sticking
+            // const cursor = document.getElementById('cursor');
+            // cursor.style.left = event.clientX + 'px';
+            // cursor.style.top = event.clientY + 'px';
             
             // Update implant position with variance
             if (isPlacing) {

@@ -702,8 +702,34 @@
     </div>
 
     <script>
-        // Placeholder for global auth state
+        // Global state
         window.currentUser = null;
+        
+        // Define ALL global functions BEFORE the module loads
+        window.signInWithGoogle = function() {
+            alert('Sign in with Google - Coming soon!');
+        };
+        
+        window.signInWithFacebook = function() {
+            alert('Sign in with Facebook - Coming soon!');
+        };
+        
+        window.signOut = function() {
+            alert('Sign out - Coming soon!');
+        };
+        
+        window.startChallenge = function() {
+            alert('Starting challenge...');
+            document.getElementById('startScreen').style.display = 'none';
+        };
+        
+        window.learnMore = function() {
+            window.open('https://neocis.com/yomi', '_blank');
+        };
+        
+        window.tryAgain = function() {
+            location.reload();
+        };
     </script>
     
     <script type="importmap">
@@ -735,7 +761,7 @@
         }
         
         // Sign in with Google (mock implementation)
-        function signInWithGoogle() {
+        window.signInWithGoogle = function() {
             // In production, this would use Google OAuth
             const mockUser = {
                 name: 'Dr. John Smith',
@@ -746,10 +772,10 @@
             };
             
             signInUser(mockUser);
-        }
+        };
         
         // Sign in with Facebook (mock implementation)
-        function signInWithFacebook() {
+        window.signInWithFacebook = function() {
             // In production, this would use Facebook OAuth
             const mockUser = {
                 name: 'Dr. Jane Doe',
@@ -760,7 +786,7 @@
             };
             
             signInUser(mockUser);
-        }
+        };
         
         // Handle sign in
         function signInUser(user) {
@@ -792,7 +818,7 @@
         }
         
         // Sign out
-        function signOut() {
+        window.signOut = function() {
             currentUser = null;
             window.currentUser = null;
             localStorage.removeItem('yomiUser');
@@ -806,7 +832,7 @@
             
             // Redirect to start screen
             location.reload();
-        }
+        };
         
         // Check auth on page load
         window.addEventListener('DOMContentLoaded', checkAuthState);
@@ -1239,13 +1265,7 @@
             location.reload();
         };
         
-        // Make ALL functions available globally
-        window.signInWithGoogle = signInWithGoogle;
-        window.signInWithFacebook = signInWithFacebook;
-        window.signOut = signOut;
-        window.startChallenge = startChallenge;
-        window.learnMore = learnMore;
-        window.tryAgain = tryAgain;
+        // Functions are already assigned to window object above
         
         // Handle resize
         window.addEventListener('resize', () => {

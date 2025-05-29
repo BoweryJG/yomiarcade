@@ -1239,10 +1239,13 @@
             location.reload();
         };
         
-        // Make auth functions available globally
+        // Make ALL functions available globally
         window.signInWithGoogle = signInWithGoogle;
         window.signInWithFacebook = signInWithFacebook;
         window.signOut = signOut;
+        window.startChallenge = startChallenge;
+        window.learnMore = learnMore;
+        window.tryAgain = tryAgain;
         
         // Handle resize
         window.addEventListener('resize', () => {

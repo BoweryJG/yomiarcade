@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Yomi Arcade - Main Menu</title>
+    <style>
+        body { 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #000 0%, #0a0a0f 100%); 
+            color: white; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+        h1 { 
+            font-size: 72px; 
+            margin-bottom: 20px; 
+            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .menu-item {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #00ff88;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .menu-item:hover {
+            background: rgba(0,255,136,0.2);
+            transform: translateY(-2px);
+        }
+        .menu-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .menu-desc {
+            font-size: 14px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YOMI ARCADE</h1>
+        <p>Choose Your Experience</p>
+        
+        <div class="menu">
+            <div class="menu-item" onclick="window.location.href='simple-working.html'">
+                <div class="menu-title">Simple Demo</div>
+                <div class="menu-desc">Basic 3D tooth visualization</div>
+            </div>
+            
+            <div class="menu-item" onclick="window.location.href='working-demo.html'">
+                <div class="menu-title">Interactive Demo</div>
+                <div class="menu-desc">Drill and clean teeth</div>
+            </div>
+            
+            <div class="menu-item" onclick="window.location.href='yomi-precision-challenge.html'">
+                <div class="menu-title">Precision Challenge</div>
+                <div class="menu-desc">Test your surgical precision</div>
+            </div>
+            
+            <div class="menu-item" onclick="window.location.href='enhanced-demo.html'">
+                <div class="menu-title">Enhanced Simulation</div>
+                <div class="menu-desc">Full featured dental procedures</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

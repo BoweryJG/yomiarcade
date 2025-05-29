@@ -702,14 +702,34 @@
     </div>
 
     <script>
+        // Placeholder for global auth state
+        window.currentUser = null;
+    </script>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    
+    <script type="module">
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+        
         // Authentication state
-        let currentUser = null;
+        let currentUser = window.currentUser;
         
         // Check if user is already signed in
         function checkAuthState() {
             const savedUser = localStorage.getItem('yomiUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
+                window.currentUser = currentUser;
                 updateUIForSignedInUser();
             }
         }
@@ -745,6 +765,7 @@
         // Handle sign in
         function signInUser(user) {
             currentUser = user;
+            window.currentUser = user;
             localStorage.setItem('yomiUser', JSON.stringify(user));
             updateUIForSignedInUser();
             
@@ -773,6 +794,7 @@
         // Sign out
         function signOut() {
             currentUser = null;
+            window.currentUser = null;
             localStorage.removeItem('yomiUser');
             
             // Reset UI
@@ -788,22 +810,6 @@
         
         // Check auth on page load
         window.addEventListener('DOMContentLoaded', checkAuthState);
-    </script>
-    
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
-    
-    <script type="module">
-        import * as THREE from 'three';
-        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         
         // Game state
         let scene, camera, renderer, composer;
@@ -1232,6 +1238,11 @@
         window.tryAgain = function() {
             location.reload();
         };
+        
+        // Make auth functions available globally
+        window.signInWithGoogle = signInWithGoogle;
+        window.signInWithFacebook = signInWithFacebook;
+        window.signOut = signOut;
         
         // Handle resize
         window.addEventListener('resize', () => {

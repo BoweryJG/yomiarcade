@@ -19,7 +19,8 @@ export default defineConfig({
         workingDemo: resolve(__dirname, 'working-demo.html'),
         yomiChallenge: resolve(__dirname, 'yomi-precision-challenge.html'),
         enhancedDemo: resolve(__dirname, 'enhanced-demo.html'),
-        indexOriginal: resolve(__dirname, 'index-original.html')
+        indexOriginal: resolve(__dirname, 'index-original.html'),
+        authSupabase: resolve(__dirname, 'auth-supabase.html')
       }
     }
   },

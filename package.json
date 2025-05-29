@@ -29,6 +29,7 @@
     "@react-three/drei": "^10.1.1",
     "@react-three/fiber": "^9.1.2",
     "@react-three/postprocessing": "^3.0.4",
+    "@supabase/supabase-js": "^2.49.8",
     "canvas-confetti": "^1.9.3",
     "chart.js": "^4.4.9",
     "framer-motion": "^12.15.0",

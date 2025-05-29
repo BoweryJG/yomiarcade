@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yomi Arcade - Supabase Auth Demo</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #000 0%, #1a1a2e 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 600px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .auth-section {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        
+        .auth-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-btn.google {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .auth-btn.google:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .auth-btn.facebook {
+            background: #1877f2;
+            color: white;
+        }
+        
+        .auth-btn.facebook:hover {
+            background: #166fe5;
+        }
+        
+        .auth-btn.signout {
+            background: #ff4444;
+            color: white;
+        }
+        
+        .user-info {
+            background: rgba(0,255,136,0.1);
+            border: 1px solid #00ff88;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .error {
+            color: #ff4444;
+            margin: 10px 0;
+        }
+        
+        .success {
+            color: #00ff88;
+            margin: 10px 0;
+        }
+        
+        .loading {
+            display: none;
+            color: #ffaa00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YOMI ARCADE AUTH</h1>
+        <p>Supabase Authentication Demo</p>
+        
+        <div class="auth-section">
+            <div id="loadingMessage" class="loading">Loading...</div>
+            <div id="errorMessage" class="error"></div>
+            <div id="successMessage" class="success"></div>
+            
+            <div id="signedOut" style="display: none;">
+                <h2>Sign In</h2>
+                <p>Choose your authentication method:</p>
+                
+                <button class="auth-btn google" onclick="signInWithGoogle()">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                        <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+                        <path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+                        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                    </svg>
+                    Sign in with Google
+                </button>
+                
+                <button class="auth-btn facebook" onclick="signInWithFacebook()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Sign in with Facebook
+                </button>
+                
+                <p style="margin-top: 20px; font-size: 14px; color: #888;">
+                    Note: You need to configure OAuth providers in your Supabase dashboard
+                </p>
+            </div>
+            
+            <div id="signedIn" style="display: none;">
+                <div class="user-info">
+                    <h2>Welcome!</h2>
+                    <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                    <p><strong>ID:</strong> <span id="userId"></span></p>
+                    <p><strong>Provider:</strong> <span id="userProvider"></span></p>
+                </div>
+                
+                <button class="auth-btn signout" onclick="signOut()">
+                    Sign Out
+                </button>
+                
+                <div style="margin-top: 30px;">
+                    <a href="index.html" style="color: #00ff88; text-decoration: none;">
+                        ← Back to Games
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+            <h3>Setup Instructions:</h3>
+            <ol style="text-align: left; line-height: 1.8;">
+                <li>Create a <code>.env</code> file in the root directory</li>
+                <li>Add your Supabase anon key: <code>VITE_SUPABASE_ANON_KEY=your_key_here</code></li>
+                <li>Configure OAuth providers in Supabase Dashboard:
+                    <ul>
+                        <li>Go to Authentication → Providers</li>
+                        <li>Enable Google and/or Facebook</li>
+                        <li>Add OAuth credentials</li>
+                        <li>Set redirect URL to your domain</li>
+                    </ul>
+                </li>
+                <li>For Netlify deployment, add environment variable in Netlify dashboard</li>
+            </ol>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Supabase from CDN
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+        
+        // Get environment variables (these will be replaced by Vite)
+        const supabaseUrl = 'https://cbopynuvhcymbumjnvay.supabase.co'
+        const supabaseAnonKey = import.meta.env?.VITE_SUPABASE_ANON_KEY || ''
+        
+        // Check if we have the anon key
+        if (!supabaseAnonKey) {
+            document.getElementById('errorMessage').textContent = 
+                'Missing Supabase anon key. Please add VITE_SUPABASE_ANON_KEY to your .env file.'
+            document.getElementById('signedOut').style.display = 'block'
+        }
+        
+        // Create Supabase client
+        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+        
+        // UI elements
+        const loadingEl = document.getElementById('loadingMessage')
+        const errorEl = document.getElementById('errorMessage')
+        const successEl = document.getElementById('successMessage')
+        const signedOutEl = document.getElementById('signedOut')
+        const signedInEl = document.getElementById('signedIn')
+        
+        // Show loading
+        function showLoading(show = true) {
+            loadingEl.style.display = show ? 'block' : 'none'
+        }
+        
+        // Show error
+        function showError(message) {
+            errorEl.textContent = message
+            successEl.textContent = ''
+            showLoading(false)
+        }
+        
+        // Show success
+        function showSuccess(message) {
+            successEl.textContent = message
+            errorEl.textContent = ''
+            showLoading(false)
+        }
+        
+        // Update UI based on auth state
+        function updateUI(user) {
+            if (user) {
+                signedOutEl.style.display = 'none'
+                signedInEl.style.display = 'block'
+                document.getElementById('userEmail').textContent = user.email || 'N/A'
+                document.getElementById('userId').textContent = user.id
+                document.getElementById('userProvider').textContent = 
+                    user.app_metadata?.provider || 'Email'
+            } else {
+                signedOutEl.style.display = 'block'
+                signedInEl.style.display = 'none'
+            }
+        }
+        
+        // Sign in with Google
+        window.signInWithGoogle = async () => {
+            showLoading()
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.href
+                    }
+                })
+                
+                if (error) throw error
+                showSuccess('Redirecting to Google...')
+            } catch (error) {
+                showError(`Google sign in failed: ${error.message}`)
+            }
+        }
+        
+        // Sign in with Facebook
+        window.signInWithFacebook = async () => {
+            showLoading()
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'facebook',
+                    options: {
+                        redirectTo: window.location.href
+                    }
+                })
+                
+                if (error) throw error
+                showSuccess('Redirecting to Facebook...')
+            } catch (error) {
+                showError(`Facebook sign in failed: ${error.message}`)
+            }
+        }
+        
+        // Sign out
+        window.signOut = async () => {
+            showLoading()
+            try {
+                const { error } = await supabase.auth.signOut()
+                if (error) throw error
+                showSuccess('Signed out successfully')
+                updateUI(null)
+            } catch (error) {
+                showError(`Sign out failed: ${error.message}`)
+            }
+        }
+        
+        // Check initial auth state
+        async function checkAuth() {
+            showLoading()
+            try {
+                const { data: { user } } = await supabase.auth.getUser()
+                updateUI(user)
+                showLoading(false)
+                
+                if (user) {
+                    showSuccess('You are signed in!')
+                }
+            } catch (error) {
+                showError(`Auth check failed: ${error.message}`)
+            }
+        }
+        
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log('Auth state changed:', event)
+            updateUI(session?.user)
+            
+            if (event === 'SIGNED_IN') {
+                showSuccess('Successfully signed in!')
+            }
+        })
+        
+        // Check auth on page load
+        checkAuth()
+    </script>
+</body>
+</html>
